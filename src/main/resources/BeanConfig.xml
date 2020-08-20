@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="userDao" class="lucien.demo.dao.UserDao" scope="singleton"/>
+
+    <bean id="userService" class="lucien.demo.service.impl.UserServiceImpl" scope="singleton">
+        <property name="userDao" dependency="userDao" />
+    </bean>
+
+    <bean id="userController" class="lucien.demo.controller.UserController" scope="singleton">
+        <property name="userService" dependency="userService" />
+    </bean>
+</beans>
