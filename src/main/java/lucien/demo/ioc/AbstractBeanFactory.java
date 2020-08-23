@@ -10,10 +10,11 @@ import lucien.demo.lifecycle.BeanPostProcessor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractBeanFactory implements BeanFactory {
     protected static Map<String, BeanConfig> beanConfigMap = new HashMap<>();
-    protected static Map<String, Object> beanMap = new HashMap<>();
+    protected static Map<String, Object> beanMap = new ConcurrentHashMap<>();
 
     protected abstract void loadBeanDefinition(String... path);
 
@@ -21,6 +22,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
         beanConfigMap.keySet().forEach(this::getBean);
     }
 
+    @Override
     public Object getBean(String id) {
         if (beanConfigMap.containsKey(id)) {
             BeanConfig beanConfig = beanConfigMap.get(id);
@@ -35,7 +37,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
                 Class<?> classInfo = Class.forName(beanConfig.getClassName());
                 Object currentBean = classInfo.newInstance();
                 if (DEFAULT_SCOPE.equalsIgnoreCase(scope)) {
-                    beanMap.put(id, currentBean);   //这里放入，如果是singleton，可避免相互依赖死循环
+                    beanMap.put(id, currentBean);
                 }
 
                 for (PropertyConfig propertyConfig : beanConfig.getPropertyConfigList()) {
@@ -53,6 +55,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
         return null;
     }
 
+    @Override
     public boolean isSingleton(String id) {
         return DEFAULT_SCOPE.equalsIgnoreCase(beanConfigMap.getOrDefault(id, new BeanConfig()).getScope());
     }

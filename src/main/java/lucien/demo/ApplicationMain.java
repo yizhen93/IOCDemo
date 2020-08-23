@@ -6,9 +6,8 @@ import lucien.demo.ioc.XMLBeanFactoryImpl;
 
 public class ApplicationMain {
     public static void main(String[] args) {
-        System.out.println();
         BeanFactory beanfactory = XMLBeanFactoryImpl.getInstance("BeanConfig.xml");
         UserController userController = (UserController) beanfactory.getBean("userController");
-        System.out.println(userController.getUserById().toString());
+        System.out.println(userController.getUserById(10L).toString());
     }
 }

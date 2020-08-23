@@ -9,7 +9,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    public UserModel getUserById() {
-        return userService.getUserById(10L);
+    public UserModel getUserById(Long id) {
+        return userService.getUserById(id);
     }
 }
